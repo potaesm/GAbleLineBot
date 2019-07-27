@@ -13,7 +13,7 @@ async function enableSecondStaffRichMenu(userId, response) {
         return request({
             method: `POST`,
             uri: `https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`,
-            headers: lineapi.LINE_HEADER,
+            headers: config.lineHeader,
         });
     }
     catch (error) {

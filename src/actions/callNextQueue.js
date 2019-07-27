@@ -52,7 +52,7 @@ async function requestnNextQueue(type, hwid, replyToken, response) {
             pushNextQueueMessage(nextusernumber, nextuserid, deptname, response);
             pushAfterNextQueueMessage(afternextusernumber, afternextuserid, deptname, response);
             pushNextAfterNextQueueMessage(nextafternextusernumber, nextafternextuserid, deptname, response);
-            return replyNextQueueMessage(`${nextuserid}`, replyToken, response);
+            return replyNextQueueMessage(nextuserid, replyToken, response);
         }
         return replyMessage(`ไม่มีคิวแล้ว`, replyToken, response);
     }
