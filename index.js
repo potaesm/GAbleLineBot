@@ -1,18 +1,14 @@
 const config = require('./config');
 const line = require('@line/bot-sdk');
 const express = require('express');
-const events = require('events');
 
 const handleEvent = require('./src/actions/handleEvent');
 
-var emitter = new events.EventEmitter();
 const app = express();
-
 const port = config.port;
-const webAPI = config.webAPI;
 
 app.get('/', function (req, response) {
-    response.send('G-ABLE LINE API V1.3');
+    response.send('G-ABLE LINE API V2.0');
 });
 
 app.post('/webhook', line.middleware(config), (request, response) => {
