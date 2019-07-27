@@ -1,7 +1,32 @@
 const request = require('request-promise');
 const config = require('../../config.json');
 
-async function replyWelcomeMessage(replyToken, response) {
+async function replyOutAreaMessage(hwid, userId, replyToken, response) {
+    try {
+        const res = await request({
+            method: `GET`,
+            uri: `${config.webAPI}/user/checkuserqueue/${hwid}/${userId}`,
+            json: true,
+        });
+        const valid = `${res.valid}`;
+        if (valid === `YES`) {
+            const remainingqueue = `${res.remainingqueue}`;
+            const deptname = `${res.deptname}`;
+            return sendReplyOutOfAreaMessage(deptname, remainingqueue - 1, replyToken, response);
+        }
+        return response.status(200).end();
+    }
+    catch (error) {
+        console.error(error);
+        return response.status(500).end();
+    }
+};
+
+async function sendReplyOutOfAreaMessage(deptname, remainingqueue, replyToken, response) {
+    var text = `จำนวนคิวที่รอ ${remainingqueue} คิว`;
+    if (remainingqueue === 0) {
+        text = `ถึงคิวท่านแล้ว`;
+    }
     try {
         await request({
             method: `POST`,
@@ -12,17 +37,11 @@ async function replyWelcomeMessage(replyToken, response) {
                 messages: [
                     {
                         type: `text`,
-                        text: `บริษัท G-Able ยินดีต้อนรับเข้าสู่งาน G-Able Career Day`,
-                    },
-                    {
-                        'type': 'image',
-                        'originalContentUrl': `${config.storageAPI}/wp-content/uploads/2019/07/LineBeaconSetting.jpg`,
-                        'previewImageUrl': `${config.storageAPI}/wp-content/uploads/2019/07/LineBeaconSetting.jpg`,
-                        'animated': false,
+                        text: text,
                     },
                     {
                         type: 'text',
-                        text: `ท่านได้เปิดใช้งาน LINE Beacon เรียบร้อยแล้วใช่หรือไม่ ?`,
+                        text: `ท่านอยู่นอกพื้นที่${deptname} ต้องการเลื่อนคิวออกไปก่อนหรือไม่ ?`,
                         quickReply: {
                             items: [
                                 {
@@ -30,8 +49,8 @@ async function replyWelcomeMessage(replyToken, response) {
                                     imageUrl: 'https://suthinanhome.files.wordpress.com/2019/06/checked-1.png',
                                     action: {
                                         type: 'message',
-                                        label: 'ใช่',
-                                        text: `ขั้นตอนต่อไป`,
+                                        label: 'เลื่อน',
+                                        text: `เลื่อนคิว${deptname}`,
                                     },
                                 },
                                 {
@@ -39,8 +58,8 @@ async function replyWelcomeMessage(replyToken, response) {
                                     imageUrl: 'https://suthinanhome.files.wordpress.com/2019/06/cancel-1.png',
                                     action: {
                                         type: 'message',
-                                        label: 'ไม่ใช่',
-                                        text: 'ไม่ใช่',
+                                        label: 'ไม่เลื่อน',
+                                        text: 'ไม่ต้องการเลื่อนคิว',
                                     },
                                 },
                             ],
@@ -57,4 +76,4 @@ async function replyWelcomeMessage(replyToken, response) {
     }
 };
 
-module.exports = replyWelcomeMessage;
+module.exports = replyOutAreaMessage;

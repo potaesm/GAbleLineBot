@@ -1,6 +1,6 @@
 const request = require('request-promise');
 const replyMessage = require('../messages/common/replyMessage');
-const replyStaffWelcomeMessage = require('../messages/replyWelcomeMessage');
+const replyStaffWelcomeMessage = require('../messages/replyStaffWelcomeMessage');
 const enableFirstStaffRichMenu = require('./common/enableFirstStaffRichMenu');
 
 async function registerStaff(userId, account, replyToken, response) {
@@ -15,13 +15,10 @@ async function registerStaff(userId, account, replyToken, response) {
             const staffHwid = `${res.hwid}`;
             return registerStaffToDB(userId, staffHwid, replyToken, response);
         }
-        else {
-            return response.status(200).end();
-        }
+        return null;
     }
     catch (error) {
         console.error(error);
-        return response.status(500).end();
     }
 };
 

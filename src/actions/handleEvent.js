@@ -1,8 +1,12 @@
 const request = require('request-promise');
 const config = require('../../config.json');
 
+const replyWelcomeMessage = require('../messages/replyWelcomeMessage');
 const replyMessage = require('../messages/common/replyMessage');
 const replySuccessMessage = require('../messages/replySuccessMessage');
+const interactBeacon = require('../actions/interactBeacon');
+const registerStaff = require('./registerStaff');
+const postponeTheQueue = require('./postponeTheQueue');
 
 const deregisterStaff = require('./deregisterStaff');
 
@@ -42,17 +46,27 @@ async function handleEvent(type, message, userId, replyToken, response) {
                                 break;
                             }
                             case 'ไม่ต้องการเลื่อนคิว': {
-                                break;
+                                return replyMessage(`กรุณาเตรียมตัวเข้าสัมภาษณ์`, replyToken, response);
                             }
                             default: {
-                                registerStaff(userId, account, replyToken, response);
                                 if (message.text.substring(0, 15) === `ยืนยันการจองคิว` && deptNameArray.includes(message.text.substring(15))) {
                                 }
                                 if (message.text.substring(0, 9) === `เลื่อนคิว` && deptNameArray.includes(message.text.substring(9))) {
+                                    return postponeTheQueue(message.text.substring(9), userId, replyToken, response);
                                 }
-                                break;
+                                return registerStaff(userId, message.text, replyToken, response);
                             }
                         }
+                    }
+                    case 'sticker': {
+                        const type = `leave`;
+                        const hwid = `012cbd1c3f`;
+                        if (type === `enter`) {
+                            return interactBeacon(hwid, userId, 1, replyToken, response);
+                        } else if (type === `leave`) {
+                            return interactBeacon(hwid, userId, 0, replyToken, response);
+                        }
+                        break;
                     }
                     default: {
                         break;
@@ -60,7 +74,7 @@ async function handleEvent(type, message, userId, replyToken, response) {
                 }
             }
             case 'follow': {
-                break;
+                return replyWelcomeMessage(replyToken, response);
             }
             case 'beacon': {
             }
