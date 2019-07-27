@@ -32,6 +32,9 @@ async function handleEvent(type, message, userId, replyToken, response) {
                 switch (message.type) {
                     case 'text': {
                         switch (message.text) {
+                            case 'ไม่ใช่': {
+                                return replyMessage(`โปรดดูรายละเอียดขั้นตอนการเปิดใช้งาน Line Beacon ในรูปภาพที่แนบมา แล้วทำการปิด-เปิด Line Application อีกครั้ง`, replyToken, response);
+                            }
                             case 'ขั้นตอนต่อไป': {
                                 return replySuccessMessage(replyToken, response);
                             }

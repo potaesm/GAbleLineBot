@@ -12,7 +12,7 @@ async function replySuccessMessage(replyToken, response) {
                 messages: [
                     {
                         type: `text`,
-                        text: `การลงทะเบียนสำเร็จ`,
+                        text: `การลงทะเบียนสำเร็จ กรุณาปิด-เปิด Line Application อีกครั้ง เพื่อการใช้งานที่สมบูรณ์`,
                     },
                     {
                         'type': 'flex',

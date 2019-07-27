@@ -8,7 +8,7 @@ const app = express();
 const port = config.port;
 
 app.get('/', function (req, response) {
-    response.send('G-ABLE LINE API V2.0');
+    response.send('G-ABLE LINE API V2.0 require { express, string-hex, request, request-promise, @line/bot-sdk }');
 });
 
 app.post('/webhook', line.middleware(config), (request, response) => {
