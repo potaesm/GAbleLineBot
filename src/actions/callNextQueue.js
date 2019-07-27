@@ -48,11 +48,21 @@ async function requestnNextQueue(type, hwid, replyToken, response) {
             const afternextusernumber = `${res.afternext.usernumber}`;
             const nextafternextuserid = `${res.nextafternext.userid}`;
             const nextafternextusernumber = `${res.nextafternext.usernumber}`;
-            pushPresentQueueMessage(type, presentusernumber, presentuserid, deptname, response);
-            pushNextQueueMessage(nextusernumber, nextuserid, deptname, response);
-            pushAfterNextQueueMessage(afternextusernumber, afternextuserid, deptname, response);
-            pushNextAfterNextQueueMessage(nextafternextusernumber, nextafternextuserid, deptname, response);
-            return replyNextQueueMessage(nextuserid, replyToken, response);
+
+            if (presentuserid !== `null`) {
+                pushPresentQueueMessage(type, presentusernumber, presentuserid, deptname, response);
+            }
+            if (afternextuserid !== `null`) {
+                pushAfterNextQueueMessage(afternextusernumber, afternextuserid, deptname, response);
+            }
+            if (nextafternextuserid !== `null`) {
+                // pushNextAfterNextQueueMessage(nextafternextusernumber, nextafternextuserid, deptname, response);
+            }
+            if (nextuserid !== `null`) {
+                pushNextQueueMessage(nextusernumber, nextuserid, deptname, response);
+                return replyNextQueueMessage(nextuserid, replyToken, response);
+            }
+            return replyMessage(`ไม่มีคิวแล้ว`, replyToken, response);
         }
         return replyMessage(`ไม่มีคิวแล้ว`, replyToken, response);
     }
