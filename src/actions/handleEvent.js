@@ -9,6 +9,7 @@ const registerStaff = require('./registerStaff');
 const enableFirstStaffRichMenu = require('./common/enableFirstStaffRichMenu');
 const enableSecondStaffRichMenu = require('./common/enableSecondStaffRichMenu');
 const joinTheQueue = require('./joinTheQueue');
+const getQueueList = require('./getQueueList');
 const postponeTheQueue = require('./postponeTheQueue');
 const callNextQueue = require('./callNextQueue');
 
