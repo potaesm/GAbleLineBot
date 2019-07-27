@@ -1,6 +1,6 @@
 const request = require('request-promise');
 const config = require('../../config.json');
-const replyNormalQueue = require('../messages/replyNormalQueue');
+const replyNormalQueue = require('../messages/common/replyNormalQueue');
 const insertUserStatus = require('./common/insertUserStatus');
 
 async function postponeTheQueue(deptname, userId, replyToken, response) {

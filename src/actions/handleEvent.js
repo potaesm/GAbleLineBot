@@ -4,9 +4,13 @@ const config = require('../../config.json');
 const replyWelcomeMessage = require('../messages/replyWelcomeMessage');
 const replyMessage = require('../messages/common/replyMessage');
 const replySuccessMessage = require('../messages/replySuccessMessage');
-const interactBeacon = require('../actions/interactBeacon');
+const interactBeacon = require('./interactBeacon');
 const registerStaff = require('./registerStaff');
+const enableFirstStaffRichMenu = require('./common/enableFirstStaffRichMenu');
+const enableSecondStaffRichMenu = require('./common/enableSecondStaffRichMenu');
+const joinTheQueue = require('./joinTheQueue');
 const postponeTheQueue = require('./postponeTheQueue');
+const callNextQueue = require('./callNextQueue');
 
 const deregisterStaff = require('./deregisterStaff');
 
@@ -34,22 +38,24 @@ async function handleEvent(type, message, userId, replyToken, response) {
                                 return deregisterStaff(userId, replyToken, response);
                             }
                             case 'ข้ามคิว': {
-                                break;
+                                return callNextQueue(`skip`, userId, replyToken, response);
                             }
                             case 'จบการสัมภาษณ์': {
-                                break;
+                                return enableFirstStaffRichMenu(userId, response);
                             }
                             case 'เรียกคิวถัดไป': {
-                                break;
+                                enableSecondStaffRichMenu(userId, response);
+                                return callNextQueue(`next`, userId, replyToken, response);
                             }
                             case 'รายการคิว': {
-                                break;
+                                return getQueueList(userId, replyToken, response);
                             }
                             case 'ไม่ต้องการเลื่อนคิว': {
                                 return replyMessage(`กรุณาเตรียมตัวเข้าสัมภาษณ์`, replyToken, response);
                             }
                             default: {
                                 if (message.text.substring(0, 15) === `ยืนยันการจองคิว` && deptNameArray.includes(message.text.substring(15))) {
+                                    return joinTheQueue(message.text.substring(15), userId, replyToken, response);
                                 }
                                 if (message.text.substring(0, 9) === `เลื่อนคิว` && deptNameArray.includes(message.text.substring(9))) {
                                     return postponeTheQueue(message.text.substring(9), userId, replyToken, response);
@@ -59,6 +65,16 @@ async function handleEvent(type, message, userId, replyToken, response) {
                         }
                     }
                     case 'sticker': {
+                        const type = `enter`;
+                        const hwid = `012cbd1c3f`;
+                        if (type === `enter`) {
+                            return interactBeacon(hwid, userId, 1, replyToken, response);
+                        } else if (type === `leave`) {
+                            return interactBeacon(hwid, userId, 0, replyToken, response);
+                        }
+                        return null;
+                    }
+                    case 'image': {
                         const type = `leave`;
                         const hwid = `012cbd1c3f`;
                         if (type === `enter`) {
@@ -66,10 +82,10 @@ async function handleEvent(type, message, userId, replyToken, response) {
                         } else if (type === `leave`) {
                             return interactBeacon(hwid, userId, 0, replyToken, response);
                         }
-                        break;
+                        return null;
                     }
                     default: {
-                        break;
+                        return null;
                     }
                 }
             }
@@ -77,9 +93,16 @@ async function handleEvent(type, message, userId, replyToken, response) {
                 return replyWelcomeMessage(replyToken, response);
             }
             case 'beacon': {
+                const type = `${req.body.events[0].beacon.type}`;
+                const hwid = `${req.body.events[0].beacon.hwid}`;
+                if (type === `enter`) {
+                    return interactBeacon(hwid, userId, 1, replyToken, response);
+                } else if (type === `leave`) {
+                    return interactBeacon(hwid, userId, 0, replyToken, response);
+                }
             }
             default: {
-                break;
+                return null;
             }
         }
     }

@@ -1,18 +1,18 @@
 const request = require('request-promise');
-const config = require('../../config.json');
+const config = require('../../../config.json');
 
-const replyNormalQueue = async (usernumber, deptname, remainingqueue, replyToken, response) => {
+async function pushNextAfterNextQueueMessage(usernumber, nextafternextuserid, deptname, response) {
     try {
         await request({
             method: `POST`,
-            uri: `${config.lineMessagingAPI}/reply`,
+            uri: `${config.lineMessagingAPI}/push`,
             headers: config.lineHeader,
             body: JSON.stringify({
-                replyToken: replyToken,
+                to: nextafternextuserid,
                 messages: [
                     {
                         'type': 'flex',
-                        'altText': `สัมภาษณ์งาน${deptname} จำนวนคิวที่รอ ${remainingqueue} คิว`,
+                        'altText': 'Flex Message',
                         'contents': {
                             'type': 'bubble',
                             'direction': 'ltr',
@@ -47,7 +47,7 @@ const replyNormalQueue = async (usernumber, deptname, remainingqueue, replyToken
                                     },
                                     {
                                         'type': 'text',
-                                        'text': `จำนวนคิวที่รอ ${remainingqueue} คิว`,
+                                        'text': 'จำนวนคิวที่รอ 2 คิว',
                                         'margin': 'xl',
                                         'size': 'xl',
                                         'align': 'center',
@@ -68,4 +68,4 @@ const replyNormalQueue = async (usernumber, deptname, remainingqueue, replyToken
     }
 };
 
-module.exports = replyNormalQueue;
+module.exports = pushNextAfterNextQueueMessage;
