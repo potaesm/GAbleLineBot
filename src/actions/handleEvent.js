@@ -107,6 +107,7 @@ async function handleEvent(type, message, beacon, userId, replyToken, response) 
                 break;
             }
         }
+        return response.status(200).end();
     }
     catch (error) {
         console.error(error);

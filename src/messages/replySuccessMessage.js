@@ -122,6 +122,7 @@ async function replySuccessMessage(replyToken, response) {
                 ],
             }),
         });
+        return response.status(200).end();
     }
     catch (error) {
         console.error(error);
