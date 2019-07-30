@@ -15,7 +15,7 @@ const callNextQueue = require('./callNextQueue');
 
 const deregisterStaff = require('./deregisterStaff');
 
-async function handleEvent(type, message, userId, replyToken, response) {
+async function handleEvent(type, message, beacon, userId, replyToken, response) {
     try {
         const res = await request({
             method: `GET`,
@@ -89,7 +89,7 @@ async function handleEvent(type, message, userId, replyToken, response) {
                         return null;
                     }
                     default: {
-                        return null;
+                        break;
                     }
                 }
             }
@@ -97,16 +97,14 @@ async function handleEvent(type, message, userId, replyToken, response) {
                 return replyWelcomeMessage(replyToken, response);
             }
             case 'beacon': {
-                const type = `${req.body.events[0].beacon.type}`;
-                const hwid = `${req.body.events[0].beacon.hwid}`;
-                if (type === `enter`) {
-                    return interactBeacon(hwid, userId, 1, replyToken, response);
-                } else if (type === `leave`) {
-                    return interactBeacon(hwid, userId, 0, replyToken, response);
+                if (beacon.type === `enter`) {
+                    return interactBeacon(beacon.hwid, userId, 1, replyToken, response);
+                } else if (beacon.type === `leave`) {
+                    return interactBeacon(beacon.hwid, userId, 0, replyToken, response);
                 }
             }
             default: {
-                return null;
+                break;
             }
         }
     }

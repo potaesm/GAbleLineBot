@@ -12,7 +12,7 @@ async function pushNextQueueMessage(usernumber, nextuserid, deptname, response) 
                 messages: [
                     {
                         'type': 'flex',
-                        'altText': 'Flex Message',
+                        'altText': 'ถึงคิวท่านแล้ว',
                         'contents': {
                             'type': 'bubble',
                             'direction': 'ltr',

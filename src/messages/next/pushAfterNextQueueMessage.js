@@ -12,7 +12,7 @@ async function pushAfterNextQueueMessage(usernumber, afternextuserid, deptname, 
                 messages: [
                     {
                         'type': 'flex',
-                        'altText': 'Flex Message',
+                        'altText': 'จำนวนคิวที่รอ 1 คิว',
                         'contents': {
                             'type': 'bubble',
                             'direction': 'ltr',

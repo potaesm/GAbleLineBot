@@ -125,6 +125,7 @@ async function replySuccessMessage(replyToken, response) {
     }
     catch (error) {
         console.error(error);
+        return response.status(500).end();
     }
 };
 

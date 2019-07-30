@@ -28,10 +28,11 @@ app.post('/webhook', line.middleware(config), (request, response) => {
 
         const type = events.type;
         const message = events.message;
+        const beacon = events.beacon;
         const userId = events.source.userId;
         const replyToken = events.replyToken;
         
-        handleEvent(type, message, userId, replyToken, response);
+        handleEvent(type, message, beacon, userId, replyToken, response);
 
     })).then(() => {
         response.status(200).end();

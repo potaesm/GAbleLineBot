@@ -19,6 +19,7 @@ async function registerStaff(userId, account, replyToken, response) {
     }
     catch (error) {
         console.error(error);
+        return response.status(500).end();
     }
 };
 
