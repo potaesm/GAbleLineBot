@@ -68,26 +68,6 @@ async function handleEvent(type, message, beacon, userId, replyToken, response) 
                             }
                         }
                     }
-                    case 'sticker': {
-                        const type = `enter`;
-                        const hwid = `012cbd1c3f`;
-                        if (type === `enter`) {
-                            return interactBeacon(hwid, userId, 1, replyToken, response);
-                        } else if (type === `leave`) {
-                            return interactBeacon(hwid, userId, 0, replyToken, response);
-                        }
-                        return null;
-                    }
-                    case 'image': {
-                        const type = `leave`;
-                        const hwid = `012cbd1c3f`;
-                        if (type === `enter`) {
-                            return interactBeacon(hwid, userId, 1, replyToken, response);
-                        } else if (type === `leave`) {
-                            return interactBeacon(hwid, userId, 0, replyToken, response);
-                        }
-                        return null;
-                    }
                     default: {
                         break;
                     }

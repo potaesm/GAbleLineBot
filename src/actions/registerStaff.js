@@ -1,4 +1,5 @@
 const request = require('request-promise');
+const config = require('../../config.json');
 const replyMessage = require('../messages/common/replyMessage');
 const replyStaffWelcomeMessage = require('../messages/replyStaffWelcomeMessage');
 const enableFirstStaffRichMenu = require('./common/enableFirstStaffRichMenu');
@@ -7,7 +8,7 @@ async function registerStaff(userId, account, replyToken, response) {
   try {
         const res = await request({
             method: `GET`,
-            uri: `https://webapi.linequeuegable.dev.nextliving.co/officer/accountstaff/${account}`,
+            uri: `${config.webAPI}/officer/accountstaff/${account}`,
             json: true,
         });
         const status = `${res.status}`;
@@ -27,7 +28,7 @@ async function registerStaffToDB(userId, staffHwid, replyToken, response) {
   try {
         const res = await request({
             method: `GET`,
-            uri: `https://webapi.linequeuegable.dev.nextliving.co/officer/registerofficer/${userId}/${staffHwid}`,
+            uri: `${config.webAPI}/officer/registerofficer/${userId}/${staffHwid}`,
             json: true,
         });
         const tied = `${res.tied}`;
